@@ -8,7 +8,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 
-app.post('/interest-form-message', (req, res, next) => {
+app.post('/api/interest-form-message', (req, res, next) => {
   console.log(req.body)
   res.json({status: 'ok'})
   res.end()
