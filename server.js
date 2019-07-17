@@ -55,8 +55,8 @@ function makeEmailBodyForFormMessage(msg) {
     <p>They didn't put in a message! How silly.</p>
   ` : `
     <p>
-      Here's what they said:<br
-      ${msg.description}.
+      Here's what they said:<br>
+      ${msg.description}
     </p>
   `)
 
