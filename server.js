@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
+const nodemailer = require('nodemailer')
 const config = require('./config/config')
-const sgMail = require('@sendgrid/mail')
 
 const PORT = process.env.PORT || 9000
 
@@ -79,22 +79,31 @@ function makeEmailBodyForFormMessage(msg) {
 }
 
 function sendFormEmail(emailBody) {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: config.email.user,
+      pass: config.email.password,
+    }
+  })
+
   const msg = {
-    to: 'ahoi@kleinhafen.ch',
-    cc: 'vlad@vladh.net',
-    from: 'no-reply@kleinhafen.ch',
+    from: 'Kleinhafen <no-reply@kleinhafen.ch>',
+    to: 'ahoi@kleinhafen.ch, vlad@vladh.net',
     subject: 'New message from the website',
     text: "There's a new message from the website! Please use an email client that supports HTML to see it.",
     html: emailBody,
   }
-  sgMail.send(msg, (err) => {
+
+  transporter.sendMail(msg, (err, info) => {
     if (err) {
       console.error(err)
     }
+    console.log(info)
   })
 }
-
-sgMail.setApiKey(config.sendgridKey)
 
 let app = express()
 app.use(cors())
