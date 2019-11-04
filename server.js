@@ -6,20 +6,7 @@ const config = require('./config/config')
 const PORT = process.env.PORT || 9000
 
 function makeEmailBodyForFormMessage(msg) {
-  const grd = (d) => d.length > 0 ? d : 'not known'
-
-  const keysToShow = ['dates', 'nPeople']
-
-  const niceKeyDict = {
-    name: 'Name',
-    email: 'Email address',
-    phone: 'Phone number',
-    company: 'Company',
-    dates: 'Event date',
-    tourDates: 'Tour date',
-    nPeople: 'Number of people',
-    description: 'Description',
-  }
+  const grd = (d) => d.length > 0 ? d : 'Not known'
 
   const formTypeLine = {
     flexDesk: `<p>Someone is asking about a flex desk.</p>`,
@@ -29,51 +16,46 @@ function makeEmailBodyForFormMessage(msg) {
   }[msg.formType]
 
   const detailsLine = `
-    <p>
-      Their name is ${grd(msg.name)}, their email is ${grd(msg.email)},
-      and their phone number is ${grd(msg.phone)}.
-    </p>
+    <tr><td>Name</td><td>${grd(msg.name)}</td></tr>
+    <tr><td>Email</td><td>${grd(msg.email)}</td></tr>
+    <tr><td>Phone number</td><td>${grd(msg.phone)}</td></tr>
   `
 
   const companyLine = (msg.company.length == 0 ? '' : `
-    <p>They work at ${msg.company}.</p>
+    <tr><td>Company</td><td>${msg.company}</td></tr>
   `)
 
   const peopleLine = (msg.nPeople.length == 0 ? '' : `
-    <p>They expect this many people: ${msg.nPeople}.</p>
+    <tr><td>Number of people</td><td>${msg.nPeople}</td></tr>
   `)
 
   const datesLine = (msg.dates.length == 0 ? '' : `
-    <p>The date(s) they need the space for is: ${msg.dates}.</p>
+    <tr><td>Date(s) needed</td><td>${msg.dates}</td></tr>
   `)
 
   const tourDatesLine = (msg.tourDates.length == 0 ? '' : `
-    <p>This is when they would like to have their tour: ${msg.tourDates}.</p>
+    <tr><td>Tour dates</td><td>${msg.tourDates}</td></tr>
   `)
 
-  const descriptionLine = (msg.description.length == 0 ? `
-    <p>They didn't put in a message! How silly.</p>
-  ` : `
-    <p>
-      Here's what they said:<br>
-      ${msg.description}
-    </p>
-  `)
+  const descriptionLine = `<tr><td>Description</td><td>${msg.description}</td></tr>`
 
   return `
   <p>Ahoi!</p>
 
   ${formTypeLine}
+
+  <table>
   ${detailsLine}
   ${companyLine}
   ${peopleLine}
   ${datesLine}
   ${tourDatesLine}
   ${descriptionLine}
+  </table>
 
   <p>
     Best,<br>
-    The friendly Kleinhafen email bot person thing guy
+    The Kleinhafen postman
   </p>
   `
 }
