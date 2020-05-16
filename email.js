@@ -82,8 +82,6 @@ function sendFormEmail(emailBody, done) {
 
   transporter.sendMail(msg, (err, info) => {
     console.log('[email#sendFormEmail]', err, info)
-    // TODO(@vladh): Remove
-    err = 'ALWAYS ERROR LOL'
     done(err, info)
   })
 }

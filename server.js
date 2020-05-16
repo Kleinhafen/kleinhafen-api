@@ -23,7 +23,7 @@ app.get('/api/instagram-feed', (req, res, next) => {
 app.post('/api/interest-form-message', (req, res, next) => {
   console.log('[/api/interest-form-message]', req.body)
   const emailBody = email.makeEmailBodyForFormMessage(req.body)
-  email.sendFormEmal(emailBody, (err, info) => {
+  email.sendFormEmail(emailBody, (err, info) => {
     if (err) {
       res.status(500)
     }
