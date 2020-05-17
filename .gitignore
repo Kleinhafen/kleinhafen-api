@@ -1,4 +1,4 @@
-config/config.js
+config/config.json
 supervisord.log
 supervisord.pid
 

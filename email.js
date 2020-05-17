@@ -1,10 +1,10 @@
+const util = require('util')
 const nodemailer = require('nodemailer')
 const config = require('./config/config')
 
 const EMAIL_FROM = 'Kleinhafen <no-reply@kleinhafen.ch>'
-// TODO(@vladh): Uncomment
-// const EMAIL_TO = 'ahoi@kleinhafen.ch, vlad@vladh.net'
-const EMAIL_TO = 'vlad@vladh.net'
+const EMAIL_TO = 'ahoi@kleinhafen.ch, vlad@vladh.net'
+const DEBUG_EMAIL_TO = 'vlad@vladh.net'
 
 function makeEmailBodyForFormMessage(msg) {
   const grd = (d) => d.length > 0 ? d : 'Not known'
@@ -86,8 +86,35 @@ function sendFormEmail(emailBody, done) {
   })
 }
 
+function sendDebugEmail(info, done) {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: config.email.user,
+      pass: config.email.password,
+    }
+  })
+
+  const msg = {
+    from: EMAIL_FROM,
+    to: DEBUG_EMAIL_TO,
+    subject: 'kleinhafen.ch debug email',
+    text: util.inspect(info, false, null),
+  }
+
+  transporter.sendMail(msg, (err, info) => {
+    console.log('[email#sendDebugEmail]', err, info)
+    if (done) {
+      done(err, info)
+    }
+  })
+}
+
 
 module.exports = {
   makeEmailBodyForFormMessage,
   sendFormEmail,
+  sendDebugEmail,
 }
